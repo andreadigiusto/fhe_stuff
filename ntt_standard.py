@@ -63,6 +63,7 @@ def multdeg3(a,b,r,p):
 q = 13
 m = 12
 root_tree = [[4],[2,6]]
+iroot_tree = [[10],[7,11]]
 Phi_12 = [1,0,-1,0,1]
 
 def ntt12(pol):
@@ -72,6 +73,14 @@ def ntt12(pol):
 
     return pol00 + pol01 + pol10 + pol11
 
+def intt12(pol):
+    #computes the inverse fourier transform 
+    pol00, pol01 = split2(pol[0:2],iroot_tree[1][0],q)
+    pol10, pol11 = split2(pol[2:4],iroot_tree[1][1],q)
+    pol0, pol1 = split6(pol00 + pol01 + pol10 + pol11,iroot_tree[0][0],q)
+
+    return pol0 + pol1
+
 A = [1,2,3,4]
 B = [5,6,7,8]
 
@@ -79,6 +88,7 @@ def ntt12mult(polA,polB):
     nttA = ntt12(polA)
     nttB = ntt12(polB)
     return np.multiply(nttA, nttB) % q
+
 
 #computations in magma show that the product of the two polynomials has coefficients [3,3,4,8]
 
@@ -115,4 +125,4 @@ A = [1,2,3,4,5,6,7,8,9,0,9,8]
 B = [7,6,5,4,3,2,1,2,3,4,5,6]
 
 #computations in magma show that the product of the two polynomials has coefficients [ 28, 10, 5, 16, 30, 5, 20, 29, 11, 9, 30, 14 ]
-print(ntt36incmult(A,B) == ntt36inc([ 28, 10, 5, 16, 30, 5, 20, 29, 11, 9, 30, 14 ]))
+#print(ntt36incmult(A,B) == ntt36inc([ 28, 10, 5, 16, 30, 5, 20, 29, 11, 9, 30, 14 ]))
